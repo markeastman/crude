@@ -42,7 +42,9 @@ public class CrudeEditor {
 
     private CrudeEditor()
     {
-       sessionFactory = HibernateUtil.getSessionFactory();
+        sessionFactory = HibernateUtil.getSessionFactory();
+        // As we are the example we need to populate a dummy database of entities so that we can run some queries
+        CrudeData.populateDatabase(sessionFactory);
     }
 
     private void listEntities() {

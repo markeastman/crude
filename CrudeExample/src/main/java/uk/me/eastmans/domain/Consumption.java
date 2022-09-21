@@ -47,4 +47,15 @@ public class Consumption {
     public void setDocumentLocation(String documentLocation) {
         this.documentLocation = documentLocation;
     }
+
+
+    @Override
+    public String toString() {
+        return "Consumption{" +
+                "id=" + id +
+                ", consumes=" + consumes +
+                ", consumedBy=" + consumedBy +
+                ", documentLocation='" + documentLocation + '\'' +
+                '}';
+    }
 }
