@@ -1,6 +1,6 @@
 package uk.me.eastmans.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class Artefact {

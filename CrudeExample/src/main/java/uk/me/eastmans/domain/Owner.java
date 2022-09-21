@@ -1,12 +1,10 @@
 package uk.me.eastmans.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table (name= "Owner")
 public class Owner {
     @Id
     @GeneratedValue
