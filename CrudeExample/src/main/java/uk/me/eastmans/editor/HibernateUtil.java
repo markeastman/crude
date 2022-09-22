@@ -1,23 +1,32 @@
 package uk.me.eastmans.editor;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
-public class HibernateUtil {
-    private static final SessionFactory sessionFactory = buildSessionFactory();
+import java.net.URL;
 
-    private static SessionFactory buildSessionFactory() {
+public class HibernateUtil {
+    private SessionFactory sessionFactory;
+    private Metadata metaData;
+
+    public HibernateUtil(URL configLocation)
+    {
         try {
             // Create the SessionFactory from hibernate.cfg.xml
 
             // A SessionFactory is set up once for an application!
-            final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                    .configure() // configures settings from hibernate.cfg.xml
-                    .build();
+            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+            if (configLocation != null)
+                builder.configure( configLocation );
+            else
+                builder.configure();
+            StandardServiceRegistry registry = builder.build();
             try {
-                return new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+                metaData = new MetadataSources( registry ).buildMetadata();
+                sessionFactory = metaData.buildSessionFactory();
             }
             catch (Exception e) {
                 System.err.println("Cannot process configuration" + e);
@@ -32,7 +41,9 @@ public class HibernateUtil {
         }
     }
 
-    public static SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+
+    public Metadata getMetaData() { return metaData; }
 }

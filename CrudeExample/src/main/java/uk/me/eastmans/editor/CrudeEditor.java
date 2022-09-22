@@ -2,9 +2,12 @@ package uk.me.eastmans.editor;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.mapping.PersistentClass;
 import org.hibernate.query.Query;
 import uk.me.eastmans.domain.Owner;
 
+import java.util.Collection;
 import java.util.List;
 
 public class CrudeEditor {
@@ -12,6 +15,7 @@ public class CrudeEditor {
     private static CrudeEditor editor;
 
     private SessionFactory sessionFactory;
+    private Metadata metaData;
 
     public static void main(String[] args) {
         System.out.println( "This is a basic JPA crud editor" );
@@ -42,12 +46,19 @@ public class CrudeEditor {
 
     private CrudeEditor()
     {
-        sessionFactory = HibernateUtil.getSessionFactory();
+        //Todo At the moment pass null so that we select from the hibernate.cfg.xml as default
+        //Todo later we can pass a URL to an external deinition
+        HibernateUtil hibernateAccess = new HibernateUtil(null);
+        sessionFactory = hibernateAccess.getSessionFactory();
+        metaData = hibernateAccess.getMetaData();;
+
         // As we are the example we need to populate a dummy database of entities so that we can run some queries
         CrudeData.populateDatabase(sessionFactory);
     }
 
     private void listEntities() {
+        Collection<PersistentClass> entities = metaData.getEntityBindings();
+        System.out.println(entities);
     }
 
     private void listEntitiesByName( String name ) {
