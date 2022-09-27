@@ -2,6 +2,7 @@ package uk.me.eastmans.editor;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.transaction.Transaction;
 import uk.me.eastmans.domain.Artefact;
 import uk.me.eastmans.domain.Consumption;
 import uk.me.eastmans.domain.Owner;
@@ -10,9 +11,9 @@ import java.util.List;
 
 public class CrudeData {
     public static void populateDatabase(EntityManager entityManager) {
-        EntityTransaction tx = entityManager.getTransaction();
-        tx.begin();
         try{
+            EntityTransaction tx = entityManager.getTransaction();
+            tx.begin();
             Owner ssoOwner = new Owner();
             ssoOwner.setName("SSO Team");
             entityManager.persist(ssoOwner);

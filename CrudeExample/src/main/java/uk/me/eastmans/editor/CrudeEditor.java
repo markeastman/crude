@@ -43,31 +43,27 @@ public class CrudeEditor {
         }
     }
 
-    private CrudeEditor()
+    public CrudeEditor()
     {
-        //Todo At the moment pass null so that we select from the hibernate.cfg.xml as default
-        //Todo later we can pass a URL to an external deinition
         JPAUtil util = new JPAUtil( "Crude" );
         entityManagerFactory = util.getEmf();
         entityManager = entityManagerFactory.createEntityManager();
 
         // As we are the example we need to populate a dummy database of entities so that we can run some queries
         CrudeData.populateDatabase(entityManager);
+        // Check the entities list
+        listEntitiesByName( "Owner" );
     }
 
-    private void listEntities() {
+    public void listEntities() {
         Metamodel metaModel = entityManager.getMetamodel();
         final Set<EntityType<?>> entities = metaModel.getEntities();
         System.out.println(entities);
     }
 
-    private void listEntitiesByName( String name ) {
-        JPAUtil util = new JPAUtil( "Crude" );
-        EntityManagerFactory emf = util.getEmf();
-        EntityManager em = emf.createEntityManager();
-
-        Query query = em.createQuery("from " + name, Object.class);
+    public void listEntitiesByName( String name ) {
+        Query query = entityManager.createQuery("select i from " + name + " i", Object.class);
         List results = query.getResultList();
-            System.out.println( "Found a total of " + results );
+        System.out.println( "Found a total of " + results.size() );
     }
 }
