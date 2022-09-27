@@ -1,9 +1,7 @@
 package uk.me.eastmans.editor;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.query.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import uk.me.eastmans.domain.Artefact;
 import uk.me.eastmans.domain.Consumption;
 import uk.me.eastmans.domain.Owner;
@@ -11,28 +9,29 @@ import uk.me.eastmans.domain.Owner;
 import java.util.List;
 
 public class CrudeData {
-    public static void populateDatabase(SessionFactory factory) {
-        try (Session session = factory.openSession()){
-            Transaction tx = session.beginTransaction();
+    public static void populateDatabase(EntityManager entityManager) {
+        EntityTransaction tx = entityManager.getTransaction();
+        tx.begin();
+        try{
             Owner ssoOwner = new Owner();
             ssoOwner.setName("SSO Team");
-            session.persist(ssoOwner);
+            entityManager.persist(ssoOwner);
             Owner eapOwner = new Owner();
             eapOwner.setName("EAP Team");
-            session.persist(eapOwner);
+            entityManager.persist(eapOwner);
             Artefact eapArtefact = new Artefact();
             eapArtefact.setName("EAP 7");
             eapArtefact.setOwner(eapOwner);
-            session.persist(eapArtefact);
+            entityManager.persist(eapArtefact);
             Artefact ssoArtefact = new Artefact();
             ssoArtefact.setName("RHSSO");
             ssoArtefact.setOwner(ssoOwner);
-            session.persist(ssoArtefact);
+            entityManager.persist(ssoArtefact);
             // Now create the consumption of RHSSO needing EAP
             Consumption sso2eap = new Consumption();
             sso2eap.setConsumes(eapArtefact);
             sso2eap.setConsumedBy(ssoArtefact);
-            session.persist(sso2eap);
+            entityManager.persist(sso2eap);
             tx.commit();
         } catch (Throwable ex) {
             System.err.println( "Failed to populate database. " + ex );

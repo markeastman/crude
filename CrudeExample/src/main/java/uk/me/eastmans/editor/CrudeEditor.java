@@ -1,21 +1,20 @@
 package uk.me.eastmans.editor;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.Metadata;
-import org.hibernate.mapping.PersistentClass;
-import org.hibernate.query.Query;
-import uk.me.eastmans.domain.Owner;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
+import jakarta.persistence.metamodel.EntityType;
+import jakarta.persistence.metamodel.Metamodel;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class CrudeEditor {
 
     private static CrudeEditor editor;
 
-    private SessionFactory sessionFactory;
-    private Metadata metaData;
+    private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
 
     public static void main(String[] args) {
         System.out.println( "This is a basic JPA crud editor" );
@@ -48,28 +47,27 @@ public class CrudeEditor {
     {
         //Todo At the moment pass null so that we select from the hibernate.cfg.xml as default
         //Todo later we can pass a URL to an external deinition
-        HibernateUtil hibernateAccess = new HibernateUtil(null);
-        sessionFactory = hibernateAccess.getSessionFactory();
-        metaData = hibernateAccess.getMetaData();;
+        JPAUtil util = new JPAUtil( "Crude" );
+        entityManagerFactory = util.getEmf();
+        entityManager = entityManagerFactory.createEntityManager();
 
         // As we are the example we need to populate a dummy database of entities so that we can run some queries
-        CrudeData.populateDatabase(sessionFactory);
+        CrudeData.populateDatabase(entityManager);
     }
 
     private void listEntities() {
-        Collection<PersistentClass> entities = metaData.getEntityBindings();
+        Metamodel metaModel = entityManager.getMetamodel();
+        final Set<EntityType<?>> entities = metaModel.getEntities();
         System.out.println(entities);
     }
 
     private void listEntitiesByName( String name ) {
-        try (Session session = sessionFactory.openSession()){
-            session.beginTransaction();
-            Query<Object> query = session.createQuery( "from " + name, Object.class );
-            List results = query.getResultList();
+        JPAUtil util = new JPAUtil( "Crude" );
+        EntityManagerFactory emf = util.getEmf();
+        EntityManager em = emf.createEntityManager();
+
+        Query query = em.createQuery("from " + name, Object.class);
+        List results = query.getResultList();
             System.out.println( "Found a total of " + results );
-        } catch (Throwable ex) {
-            System.err.println( "Failed to create sessionFactory object. " + ex );
-            throw new ExceptionInInitializerError(ex);
-        }
     }
 }
