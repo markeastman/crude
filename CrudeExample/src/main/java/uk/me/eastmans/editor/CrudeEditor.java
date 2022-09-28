@@ -23,6 +23,11 @@ public class CrudeEditor {
                 editor = new CrudeEditor();
             // Process the args
             switch (args[0]) {
+                case "populateData":
+                    System.out.println( "Populating the database");
+                    editor.populateData();
+                    break;
+
                 case "listEntities":
                     System.out.println( "Listing all entity types" );
                     editor.listEntities();
@@ -39,7 +44,7 @@ public class CrudeEditor {
             }
         }
         else {
-            System.err.println( "usage: .. listEntities \n       .. listEntity nameOfEntity");
+            System.err.println( "usage: .. populateData \n       .. listEntities \n       .. listEntity nameOfEntity");
         }
     }
 
@@ -49,10 +54,14 @@ public class CrudeEditor {
         entityManagerFactory = util.getEmf();
         entityManager = entityManagerFactory.createEntityManager();
 
+       // Check the entities list
+        listEntitiesByName( "Owner" );
+    }
+
+    public void populateData() {
         // As we are the example we need to populate a dummy database of entities so that we can run some queries
         CrudeData.populateDatabase(entityManager);
-        // Check the entities list
-        listEntitiesByName( "Owner" );
+        listEntitiesByName("Owner");
     }
 
     public void listEntities() {
