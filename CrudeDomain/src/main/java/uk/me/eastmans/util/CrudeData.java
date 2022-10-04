@@ -1,13 +1,36 @@
-package uk.me.eastmans.editor;
+package uk.me.eastmans.util;
 
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import uk.me.eastmans.domain.Artefact;
 import uk.me.eastmans.domain.Consumption;
 import uk.me.eastmans.domain.Owner;
 
 public class CrudeData {
-    public static void populateDatabase(EntityManager entityManager) {
+    public void main(String[] args) {
+        System.out.println( "This is a basic JPA crud data example" );
+        if (args.length > 0) {
+            // Process the args
+            switch (args[0]) {
+                case "populateData":
+                    System.out.println("Populating the database");
+                    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Crude");
+                    EntityManager entityManager = entityManagerFactory.createEntityManager();
+                    populateDatabase(entityManager);
+                    break;
+
+                default:
+                    System.err.println( "Unknown command " + args[0] );
+                    break;
+            }
+        }
+        else {
+            System.err.println( "usage: .. populateData");
+        }
+    }
+    private static void populateDatabase(EntityManager entityManager) {
         try{
             EntityTransaction tx = entityManager.getTransaction();
             tx.begin();
