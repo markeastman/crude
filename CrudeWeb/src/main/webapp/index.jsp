@@ -1,5 +1,8 @@
+<%@page language = "java" contentType = "text/html"%>
+
+<!DOCTYPE html>
 <html>
     <body>
-        <h2>Hello Crude!</h2>
+        <h2>Hello Crude from a JSP!</h2>
     </body>
 </html>

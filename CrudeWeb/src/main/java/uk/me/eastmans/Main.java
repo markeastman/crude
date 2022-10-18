@@ -1,8 +1,12 @@
 package uk.me.eastmans;
 import java.io.File;
+import java.net.URL;
 
+import org.apache.catalina.Context;
 import org.apache.catalina.WebResourceRoot;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
+import org.apache.catalina.startup.ContextConfig;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.DirResourceSet;
 import org.apache.catalina.webresources.StandardRoot;
@@ -11,7 +15,6 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        String webappDirLocation = "src/main/webapp/";
         Tomcat tomcat = new Tomcat();
 
         //The port that we should run on can be set into an environment variable
@@ -21,20 +24,28 @@ public class Main {
             webPort = "8080";
         }
 
+        System.out.println("Setting the port to " + webPort);
         tomcat.setPort(Integer.valueOf(webPort));
 
-        StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
-        System.out.println("configuring app with basedir: " + new File("./" + webappDirLocation).getAbsolutePath());
+        String contextPath = "/CrudeWeb";
+        String appBase = ".";
+        tomcat.setHostname("localhost");
+        tomcat.getHost().setAppBase(appBase);
+        Context c = tomcat.addWebapp(contextPath, appBase);
 
-        // Declare an alternative location for your "WEB-INF/classes" dir
-        // Servlet 3.0 annotation will work
-        File additionWebInfClasses = new File("target/classes");
-        WebResourceRoot resources = new StandardRoot(ctx);
-        resources.addPreResources(new DirResourceSet(resources, "/WEB-INF/classes",
-                additionWebInfClasses.getAbsolutePath(), "/"));
-        ctx.setResources(resources);
+        // Add the jar folder for the scanning
+        final WebResourceRoot root = new StandardRoot(c);
+        final URL url = findClassLocation(Main.class);
+        root.createWebResourceSet(WebResourceRoot.ResourceSetType.PRE,"/WEB-INF/classes", url, "/" );
+        c.setResources(root);
 
+        // Create the connection
+        tomcat.getConnector();
         tomcat.start();
         tomcat.getServer().await();
+    }
+
+    private static URL findClassLocation(Class<?> clazz) {
+        return clazz.getProtectionDomain().getCodeSource().getLocation();
     }
 }
