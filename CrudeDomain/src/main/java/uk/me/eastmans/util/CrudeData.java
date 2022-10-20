@@ -30,7 +30,7 @@ public class CrudeData {
             System.err.println( "usage: .. populateData");
         }
     }
-    private static void populateDatabase(EntityManager entityManager) {
+    public static void populateDatabase(EntityManager entityManager) {
         try{
             EntityTransaction tx = entityManager.getTransaction();
             tx.begin();
