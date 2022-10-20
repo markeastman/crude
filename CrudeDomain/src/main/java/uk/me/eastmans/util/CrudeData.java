@@ -50,8 +50,8 @@ public class CrudeData {
             entityManager.persist(ssoArtefact);
             // Now create the consumption of RHSSO needing EAP
             Consumption sso2eap = new Consumption();
-            sso2eap.setConsumes(eapArtefact);
-            sso2eap.setConsumedBy(ssoArtefact);
+            sso2eap.setConsumes(ssoArtefact);
+            sso2eap.setConsumedBy(eapArtefact);
             entityManager.persist(sso2eap);
             tx.commit();
         } catch (Throwable ex) {
