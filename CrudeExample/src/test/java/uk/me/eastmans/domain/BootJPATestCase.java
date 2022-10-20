@@ -13,12 +13,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class BootJPATestCase {
     @Test
     public void testEntitiesList() {
-        final EntityManagerFactory emf = Persistence.createEntityManagerFactory("Crude");
-        final Set<EntityType<?>> entities = emf.getMetamodel().getEntities();
-        assertTrue(entities.size() > 0, "No entities were found");
-        for (EntityType<?> e : entities) {
-            System.out.println(e.getName());
+        try {
+            Class c = Class.forName("uk.me.eastmans.domain.Artefact");
+            System.err.println( "Class is " + c );
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
+//        final EntityManagerFactory emf = Persistence.createEntityManagerFactory("Crude");
+//        final Set<EntityType<?>> entities = emf.getMetamodel().getEntities();
+//        assertTrue(entities.size() > 0, "No entities were found");
+//        for (EntityType<?> e : entities) {
+//            System.out.println(e.getName());
+//        }
     }
 
     @Test

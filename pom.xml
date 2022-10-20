@@ -15,6 +15,7 @@
     <modules>
         <module>CrudeDomain</module>
         <module>CrudeExample</module>
+        <module>CrudeWeb</module>
     </modules>
 
     <properties>

@@ -18,23 +18,24 @@ public class CrudeEditor {
 
     public static void main(String[] args) {
         System.out.println( "This is a basic JPA crud editor" );
+        try {
+            Class c = Class.forName("uk.me.eastmans.domain.Artefact");
+            System.out.println( "Class is " + c );
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         if (args.length > 0) {
             if (editor == null)
                 editor = new CrudeEditor();
             // Process the args
             switch (args[0]) {
-                case "populateData":
-                    System.out.println( "Populating the database");
-                    editor.populateData();
-                    break;
-
                 case "listEntities":
                     System.out.println( "Listing all entity types" );
                     editor.listEntities();
                     break;
 
                 case "listEntity":
-                    System.out.println( "Listing enitities of type '" + args[1] + "'" );
+                    System.out.println( "Listing entities of type '" + args[1] + "'" );
                     editor.listEntitiesByName( args[1] );
                     break;
 
@@ -53,15 +54,6 @@ public class CrudeEditor {
         JPAUtil util = new JPAUtil( "Crude" );
         entityManagerFactory = util.getEmf();
         entityManager = entityManagerFactory.createEntityManager();
-
-       // Check the entities list
-        listEntitiesByName( "Owner" );
-    }
-
-    public void populateData() {
-        // As we are the example we need to populate a dummy database of entities so that we can run some queries
-        CrudeData.populateDatabase(entityManager);
-        listEntitiesByName("Owner");
     }
 
     public void listEntities() {
