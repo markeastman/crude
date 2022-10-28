@@ -2,15 +2,14 @@ package uk.me.eastmans.servlet;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import jakarta.persistence.metamodel.EntityType;
-import jakarta.persistence.metamodel.ManagedType;
-import jakarta.persistence.metamodel.Metamodel;
+import jakarta.persistence.metamodel.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.hibernate.metamodel.model.domain.internal.SingularAttributeImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,7 +37,14 @@ public class listEntityServlet extends HttpServlet {
             if (type instanceof EntityType<?> entityType) {
                 if (entityType.getName().equals(entityName)) {
                     // We have the entity we want to output some column headers for it
+                    // @Carlo Trying to find out what the property name of the identifier field is
+//                    Set<SingularAttributeImpl> attributes = entityType.getAttributes();
+//                    for (SingularAttributeImpl attribute : attributes) {
+//
+//                    }
                     req.setAttribute("entityAttributes", entityType.getAttributes());
+//                    if (entityType.hasSingleIdAttribute() && entityType.)
+//                    Set idClassAttributes = entityType.getIdClassAttributes();
                     break;
                 }
             }
