@@ -13,7 +13,21 @@
         <c:forEach var="row" items="${entityList}">
             <tr>
             <c:forEach var="attribute" items="${entityAttributes}">
-                <td>${row[attribute.name]}</td>
+            <c:set var="cellData" value="${row[attribute.name]}" />
+                <td>
+                <c:choose>
+                <c:when test="${attribute.name == idAttributeName}">
+                    <c:url value="./displayEntity" var="displayURL">
+                        <c:param name="entityName" value="${entityName}" />
+                        <c:param name="entityId" value="${cellData}" />
+                    </c:url>
+                    <a href="${displayURL}">${cellData}</a>
+                </c:when>
+                <c:otherwise>
+                    ${cellData}
+                </c:otherwise>
+                </c:choose>
+                </td>
             </c:forEach>
             </tr>
         </c:forEach>

@@ -9,17 +9,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.metamodel.model.domain.internal.SingularAttributeImpl;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
 @WebServlet(
-        name = "ListEntitiesServlet",
+        name = "ListEntityServlet",
         value = {"/listEntity"}
 )
-public class listEntityServlet extends HttpServlet {
+public class ListEntityServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -45,6 +44,8 @@ public class listEntityServlet extends HttpServlet {
                     req.setAttribute("entityAttributes", entityType.getAttributes());
 //                    if (entityType.hasSingleIdAttribute() && entityType.)
 //                    Set idClassAttributes = entityType.getIdClassAttributes();
+                    // We need to output the name of the identifier attribute
+                    req.setAttribute( "idAttributeName", "id" );
                     break;
                 }
             }
