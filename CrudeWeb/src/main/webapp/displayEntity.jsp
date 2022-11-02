@@ -5,10 +5,10 @@
         <h2>Entity of type ${entityName} and identifier ${entityId}</h2>
 
         <table border="1" width="100%">
-            <c:forEach var="attribute" items="${entityAttributes}">
+            <c:forEach var="attribute" items="${entityMetaData.attributeNames}">
             <tr>
-                <th>${attribute.name}</th>
-                <td>${entity[attribute.name]}</td>
+                <th>${attribute}</th>
+                <td>${entity[attribute]}</td>
             </tr>
             </c:forEach>
         </table>
