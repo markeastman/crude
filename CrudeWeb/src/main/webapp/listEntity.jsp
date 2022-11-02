@@ -6,17 +6,17 @@
 
         <table border="1" width="100%">
             <tr>
-            <c:forEach var="attribute" items="${entityMetaData.attributeNames}">
-                <th>${attribute}</th>
+            <c:forEach var="attribute" items="${entityMetaData.attributes}">
+                <th>${attribute.name}</th>
             </c:forEach>
             </tr>
         <c:forEach var="row" items="${entityList}">
             <tr>
-            <c:forEach var="attribute" items="${entityMetaData.attributeNames}">
-            <c:set var="cellData" value="${row[attribute]}" />
+            <c:forEach var="attribute" items="${entityMetaData.attributes}">
+            <c:set var="cellData" value="${row[attribute.name]}" />
                 <td>
                 <c:choose>
-                <c:when test="${attribute == entityMetaData.identifierAttributeName}">
+                <c:when test="${attribute.name == entityMetaData.identifierAttributeName}">
                     <c:url value="./displayEntity" var="displayURL">
                         <c:param name="entityName" value="${entityName}" />
                         <c:param name="entityId" value="${cellData}" />

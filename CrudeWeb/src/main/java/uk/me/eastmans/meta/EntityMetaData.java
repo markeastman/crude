@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class EntityMetaData {
     private String name;
-    private Set<String> attributeNames;
+    private Set<EntityAttribute> attributes;
 
     private String identifierAttributeName;
 
@@ -16,12 +16,12 @@ public class EntityMetaData {
         return name;
     }
 
-    public Set<String> getAttributeNames() {
-        return attributeNames;
+    public Set<EntityAttribute> getAttributes() {
+        return attributes;
     }
 
-    public void setAttributeNames(Set<String> names) {
-        attributeNames = names;
+    public void setAttributes(Set<EntityAttribute> attrs) {
+        attributes = attrs;
     }
 
     public String getIdentifierAttributeName() {

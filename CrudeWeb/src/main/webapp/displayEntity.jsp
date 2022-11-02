@@ -5,10 +5,24 @@
         <h2>Entity of type ${entityName} and identifier ${entityId}</h2>
 
         <table border="1" width="100%">
-            <c:forEach var="attribute" items="${entityMetaData.attributeNames}">
+            <c:forEach var="attribute" items="${entityMetaData.attributes}">
             <tr>
-                <th>${attribute}</th>
-                <td>${entity[attribute]}</td>
+                <th>${attribute.name}</th>
+                <c:set var="cellData" value="${entity[attribute.name]}" />
+                <td>
+                <c:choose>
+                <c:when test="${attribute.association}">
+                    <c:url value="./displayEntity" var="displayURL">
+                        <c:param name="entityName" value="AssociationName" />
+                        <c:param name="entityId" value="id" />
+                    </c:url>
+                    <a href="${displayURL}">${cellData}</a>
+                </c:when>
+                <c:otherwise>
+                    ${cellData}
+                </c:otherwise>
+                </c:choose>
+                </td>
             </tr>
             </c:forEach>
         </table>

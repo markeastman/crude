@@ -30,16 +30,21 @@ public class ListEntityServlet extends HttpServlet {
         String entityName = req.getParameter("entityName");
         MetaDataStore metaStore = (MetaDataStore)req.getServletContext().getAttribute(CrudeServletListener.META_DATA_STORE);
         EntityMetaData metaData = metaStore.getEntityMetaData( entityName );
-
-        EntityManager em = (EntityManager)req.getServletContext().getAttribute(CrudeServletListener.ENTITY_MANAGER);
-        Query query = em.createQuery("select i from " + entityName + " i", Object.class);
-        List<?> results = query.getResultList();
-
         req.setAttribute("entityName", entityName );
-        req.setAttribute( "entityMetaData", metaData );
-        req.setAttribute("entityList", results );
+        RequestDispatcher requestDispatcher;
+        if (metaData != null) {
+            EntityManager em = (EntityManager)req.getServletContext().getAttribute(CrudeServletListener.ENTITY_MANAGER);
+            Query query = em.createQuery("select i from " + entityName + " i", Object.class);
+            List<?> results = query.getResultList();
 
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("listEntity.jsp" );
+            req.setAttribute( "entityMetaData", metaData );
+            req.setAttribute("entityList", results );
+
+            requestDispatcher = req.getRequestDispatcher("listEntity.jsp" );
+        } else {
+            // We did not manage to find the entity meta data
+            requestDispatcher = req.getRequestDispatcher("noMetaData.jsp" );
+        }
         requestDispatcher.forward(req, resp);
     }
 
