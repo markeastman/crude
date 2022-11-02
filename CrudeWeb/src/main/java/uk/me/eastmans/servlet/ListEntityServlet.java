@@ -36,16 +36,11 @@ public class ListEntityServlet extends HttpServlet {
             if (type instanceof EntityType<?> entityType) {
                 if (entityType.getName().equals(entityName)) {
                     // We have the entity we want to output some column headers for it
-                    // @Carlo Trying to find out what the property name of the identifier field is
-//                    Set<SingularAttributeImpl> attributes = entityType.getAttributes();
-//                    for (SingularAttributeImpl attribute : attributes) {
-//
-//                    }
-                    req.setAttribute("entityAttributes", entityType.getAttributes());
-//                    if (entityType.hasSingleIdAttribute() && entityType.)
-//                    Set idClassAttributes = entityType.getIdClassAttributes();
+                   req.setAttribute("entityAttributes", entityType.getAttributes());
+                    // We need to get the name of the identifier property
+                    String idAttributeName = getIdentifierPropertyName(entityType);
                     // We need to output the name of the identifier attribute
-                    req.setAttribute( "idAttributeName", "id" );
+                    req.setAttribute( "idAttributeName", idAttributeName );
                     break;
                 }
             }
@@ -56,5 +51,16 @@ public class ListEntityServlet extends HttpServlet {
 
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("listEntity.jsp" );
         requestDispatcher.forward(req, resp);
+    }
+
+    private <T> String getIdentifierPropertyName( EntityType<T> entityType)
+    {
+//        final Set<Attribute<? super T, ?>> attrs = entityType.getAttributes();
+        final Set<SingularAttribute<? super T, ?>> singleAttrs = entityType.getSingularAttributes();
+        for (SingularAttribute attribute : singleAttrs) {
+            if (attribute.isId())
+                return attribute.getName();
+        }
+        return null;
     }
 }
