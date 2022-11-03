@@ -40,7 +40,7 @@ public class MetaDataStore {
     {
         final Set<Attribute<? super T, ?>> attrs = entityType.getAttributes();
         // Build a set of attribute names
-        Set<EntityAttribute> attributes = new TreeSet<EntityAttribute>();
+        List<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
         for (Attribute<? super T, ?> attribute : attrs) {
             EntityAttribute entityAttribute = new EntityAttribute(attribute.getName());
             entityAttribute.setAssociation(attribute.isAssociation());
