@@ -24,7 +24,7 @@
             <c:set var="cellData" value="${row[attribute.name]}" />
                 <td>
                 <c:choose>
-                <c:when test="${attribute.name == entityMetaData.identifierAttributeName}">
+                <c:when test="${attribute.identifier}">
                     <c:url value="./displayEntity" var="displayURL">
                         <c:param name="entityName" value="${entityName}" />
                         <c:param name="entityId" value="${cellData}" />

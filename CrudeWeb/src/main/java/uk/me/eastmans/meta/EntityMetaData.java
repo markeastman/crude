@@ -32,13 +32,6 @@ public class EntityMetaData {
 
     public void setIdentifierAttributeName(String identifierName) {
         identifierAttributeName = identifierName;
-        // We need to update the entity attributes to flag the identifier ones
-        for( EntityAttribute attr : attributes) {
-            if (attr.getName().equals(identifierName))
-                attr.setIsIdentifier(true);
-        }
-        // Sort the list of attributes again now
-        Collections.sort(attributes);
     }
 
 }

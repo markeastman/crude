@@ -36,24 +36,35 @@ public class MetaDataStore {
         return data;
     }
 
-    private <T> void processEntity( EntityMetaData metaData, EntityType<T> entityType)
-    {
+    private <T> void processEntity( EntityMetaData metaData, EntityType<T> entityType) {
         final Set<Attribute<? super T, ?>> attrs = entityType.getAttributes();
         // Build a set of attribute names
         List<EntityAttribute> attributes = new ArrayList<EntityAttribute>();
         for (Attribute<? super T, ?> attribute : attrs) {
             EntityAttribute entityAttribute = new EntityAttribute(attribute.getName());
-            entityAttribute.setAssociation(attribute.isAssociation());
-            //entityAttribute.setAssociatedEntityName(attribute.getDeclaringType().);
+            // Check to see if the attribute is a collection, if so
+            // for now take off the association aspect as we will mess up the display
             attributes.add(entityAttribute);
+            entityAttribute.setIsCollection(attribute.isCollection());
+            if (!attribute.isCollection()) {
+                entityAttribute.setAssociation(attribute.isAssociation());
+                if (attribute instanceof SingularAttribute) {
+                    SingularAttribute singleAttr = (SingularAttribute) attribute;
+                    if (singleAttr.isId()) {
+                        entityAttribute.setIsIdentifier(true);
+                        metaData.setIdentifierAttributeName(singleAttr.getName());
+                    }
+                    if (singleAttr.isAssociation()) {
+                        // We need to know what type of foreign object is it and
+                        // also what is the identifier value of that linked object
+                        EntityType associatedEntityType = (EntityType) singleAttr.getType();
+                        entityAttribute.setAssociatedEntityName(associatedEntityType.getName());
+                    }
+                }
+            }
         }
+        // Sort the list of attributes again now
+        Collections.sort(attributes);
         metaData.setAttributes(attributes);
-        // Now find the identifier one
-        final Set<SingularAttribute<? super T, ?>> singleAttrs = entityType.getSingularAttributes();
-        for (SingularAttribute<? super T, ?> attribute : singleAttrs) {
-            if (attribute.isId())
-                metaData.setIdentifierAttributeName( attribute.getName() );
-        }
-//        String name = entityType.getId(entityType.getIdType().getJavaType()).getName();
     }
-}
+ }

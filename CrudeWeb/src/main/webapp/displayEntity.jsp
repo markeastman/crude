@@ -17,14 +17,19 @@
             <tr>
                 <th align="right">${attribute.name}</th>
                 <c:set var="cellData" value="${entity[attribute.name]}" />
+                <c:set var="associatedProperty" value="${entityMetaData.identifierAttributeName}" />
                 <td>
                 <c:choose>
                 <c:when test="${attribute.association}">
+                    <c:set var="associatedEntity" value="${entity[attribute.name]}" />
                     <c:url value="./displayEntity" var="displayURL">
-                        <c:param name="entityName" value="AssociationName" />
-                        <c:param name="entityId" value="id" />
+                        <c:param name="entityName" value="${attribute.associatedEntityName}" />
+                        <c:param name="entityId" value="${associatedEntity[associatedProperty]}" />
                     </c:url>
                     <a href="${displayURL}">${cellData}</a>
+                </c:when>
+                <c:when test="${attribute.collection}">
+                    Collection: ${cellData}
                 </c:when>
                 <c:otherwise>
                     ${cellData}
